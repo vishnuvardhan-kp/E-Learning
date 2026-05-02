@@ -1,0 +1,190 @@
+/* --- Student Architecture --- */
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid #000000;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  padding: 40px 24px;
+  font-size: 28px;
+  font-weight: 950;
+  letter-spacing: -2.5px;
+  margin: 0;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 4px solid transparent;
+}
+
+.sidebar a:hover, .sidebar a.active {
+  background: #2e2e2e;
+  padding-left: 30px;
+  border-left-color: #ffffff;
+}
+
+.logout-button {
+  padding: 14px 24px;
+  font-size: 11px;
+  font-weight: 950;
+  color: #ffffff;
+  background: #ef4444; 
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.logout-button:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.action-button {
+  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1);
+}
+
+.action-button:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+}
+
+.page-container {
+  padding: 40px;
+  width: 100%;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 25px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 950;
+  letter-spacing: -2px;
+  color: #0f172a;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.card {
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03), 0 2px 4px -1px rgba(0,0,0,0.02);
+}
+
+.card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02);
+  transform: translateY(-4px);
+  border-color: #cbd5e1;
+}
+
+.card h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+}
+
+.card p {
+  margin: 0 0 16px 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.stat-card {
+  background: #f8fafc;
+  padding: 24px;
+  border-left: 4px solid #0f172a;
+}
+
+.stat-card h4 {
+  margin: 0 0 8px 0;
+  color: #64748b;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-card .value {
+  font-size: 36px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -2px;
+}
+
+.upload-area {
+  border: 2px dashed #cbd5e1;
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 24px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: #0f172a;
+  background: #f8fafc;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0f172a;
+}
