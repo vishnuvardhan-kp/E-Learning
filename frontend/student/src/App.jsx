@@ -37,7 +37,7 @@ export default function App() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch('http://localhost:5000/courses');
+      const res = await fetch('http://127.0.0.1:5000/courses');
       const data = await res.json();
       setCourses(data);
     } catch(e) {
@@ -53,7 +53,7 @@ export default function App() {
     try {
       const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
       if (storedUser._id) {
-        const res = await fetch(`http://localhost:5000/enroll/${storedUser._id}`);
+        const res = await fetch(`http://127.0.0.1:5000/enroll/${storedUser._id}`);
         const data = await res.json();
         
         // Mark which courses are enrolled in the master list
@@ -86,7 +86,7 @@ export default function App() {
         return;
       }
 
-      const res = await fetch('http://localhost:5000/enroll', {
+      const res = await fetch('http://127.0.0.1:5000/enroll', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ studentId: storedUser._id, courseId: course._id })
