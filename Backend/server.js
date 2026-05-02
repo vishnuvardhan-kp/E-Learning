@@ -347,7 +347,12 @@ app.post('/enroll', async (req, res) => {
       console.log("Already enrolled.");
       return res.status(400).json({ error: 'Already enrolled' });
     }
-    const result = await db.collection('enrollments').insertOne({ studentId, courseId, status: 'Active' });
+    const result = await db.collection('enrollments').insertOne({ 
+      studentId, 
+      courseId, 
+      status: 'Active', 
+      enrolledAt: new Date() 
+    });
     console.log("Enrollment successful.");
     res.json(result);
   } catch (error) { 
@@ -363,6 +368,16 @@ app.get('/enroll/:studentId', async (req, res) => {
     const enrollments = await db.collection('enrollments').find({ studentId }).toArray();
     res.json(enrollments);
   } catch (error) { res.status(500).json({ error: error.message }); }
+});
+
+app.get('/admin/enrollments', async (req, res) => {
+  try {
+    const db = getDB();
+    const enrollments = await db.collection('enrollments').find({}).toArray();
+    res.json(enrollments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.listen(5000, () => {

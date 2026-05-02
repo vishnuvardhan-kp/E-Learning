@@ -1,36 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function StudentEnrollment(props) {
-  const enrollmentsState = useState([
-    { id: 1, name: 'John Doe', courseId: 1, status: 'Pending', borderColor: '#eab308' },
-    { id: 2, name: 'Alice Smith', courseId: 1, status: 'Active', borderColor: '#10b981' },
-    { id: 3, name: 'Bob Jones', courseId: 2, status: 'Pending', borderColor: '#eab308' }
-  ]);
-  const enrollments = enrollmentsState[0];
-  const setEnrollments = enrollmentsState[1];
+  const [enrollments, setEnrollments] = useState([]);
+  const [students, setStudents] = useState([]);
 
-  const approveEnrollment = function(id) {
-    const newEnrollments = enrollments.map(function(e) {
-      if (e.id === id) {
-          const updated = Object.assign({}, e);
-          updated.status = 'Active';
-          updated.borderColor = '#10b981';
-          return updated;
-      }
-      return e;
-    });
-    setEnrollments(newEnrollments);
+  const fetchData = async () => {
+    try {
+      // Fetch all students to get names
+      const sRes = await fetch('http://127.0.0.1:5000/student');
+      const sData = await sRes.json();
+      setStudents(sData);
+
+      // Fetch all enrollments
+      const eRes = await fetch('http://127.0.0.1:5000/courses'); // Need a way to get enrollments
+      // Wait, I need a route for all enrollments or by course
+      // I'll fetch all enrollments from a new route I'll add
+      const enrRes = await fetch('http://127.0.0.1:5000/admin/enrollments'); 
+      const enrData = await enrRes.json();
+      setEnrollments(enrData);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const rejectEnrollment = function(id) {
-    const newEnrollments = enrollments.filter(function(e) {
-        return e.id !== id;
-    });
-    setEnrollments(newEnrollments);
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const filteredEnrollments = props.activeCourse 
-        ? enrollments.filter(function(e) { return e.courseId === Number(props.activeCourse) }) 
+        ? enrollments.filter(function(e) { return e.courseId === props.activeCourse }) 
         : enrollments;
 
   return (
@@ -39,26 +37,15 @@ export default function StudentEnrollment(props) {
       
       <div className="card-grid">
         {filteredEnrollments.map(function(enrollment) {
-            let courseTitle = 'Unknown Course';
-            if (props.courses) {
-                const foundCourse = props.courses.find(function(c) { return c.id === enrollment.courseId });
-                if (foundCourse) {
-                    courseTitle = foundCourse.title;
-                }
-            }
+            const student = students.find(s => s._id === enrollment.studentId);
+            const course = props.courses.find(c => c._id === enrollment.courseId);
+            
             return (
-            <div key={enrollment.id} className="card" style={{ borderLeft: '4px solid ' + enrollment.borderColor }}>
-              <h3>{enrollment.name}</h3>
-              <p>Course: {courseTitle}</p>
+            <div key={enrollment._id} className="card" style={{ borderLeft: '4px solid #10b981' }}>
+              <h3>{student ? student.username : 'Unknown Student'}</h3>
+              <p>Course: {course ? course.title : 'Unknown Course'}</p>
               <p>Status: {enrollment.status}</p>
-              {enrollment.status === 'Pending' ? (
-                  <div className="card-actions" style={{ display: 'flex', gap: '10px' }}>
-                    <button className="action-button" style={{ background: '#10b981' }} onClick={function() { approveEnrollment(enrollment.id) }}>Approve</button>
-                    <button className="action-button" style={{ background: '#ef4444' }} onClick={function() { rejectEnrollment(enrollment.id) }}>Reject</button>
-                  </div>
-              ) : (
-                  <button className="action-button" style={{ background: '#e2e8f0', color: '#0f172a' }}>View Profile</button>
-              )}
+              <p style={{ fontSize: '12px', color: '#64748b' }}>Enrolled On: {enrollment.enrolledAt ? new Date(enrollment.enrolledAt).toLocaleDateString() : 'N/A'}</p>
             </div>
         )})}
         {filteredEnrollments.length === 0 ? <p>No enrollments found for this view.</p> : null}
