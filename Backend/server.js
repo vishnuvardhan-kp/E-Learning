@@ -340,12 +340,20 @@ app.get('/notifications', async (req, res) => {
 app.post('/enroll', async (req, res) => {
   try {
     const { studentId, courseId } = req.body;
+    console.log(`Enrollment Request: Student=${studentId}, Course=${courseId}`);
     const db = getDB();
     const existing = await db.collection('enrollments').findOne({ studentId, courseId });
-    if (existing) return res.status(400).json({ error: 'Already enrolled' });
+    if (existing) {
+      console.log("Already enrolled.");
+      return res.status(400).json({ error: 'Already enrolled' });
+    }
     const result = await db.collection('enrollments').insertOne({ studentId, courseId, status: 'Active' });
+    console.log("Enrollment successful.");
     res.json(result);
-  } catch (error) { res.status(500).json({ error: error.message }); }
+  } catch (error) { 
+    console.error("Enrollment error:", error);
+    res.status(500).json({ error: error.message }); 
+  }
 });
 
 app.get('/enroll/:studentId', async (req, res) => {

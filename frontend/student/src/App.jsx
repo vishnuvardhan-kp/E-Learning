@@ -80,15 +80,28 @@ export default function App() {
 
   const handleEnroll = async (course) => {
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      await fetch('http://localhost:5000/enroll', {
+      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!storedUser._id) {
+        alert("Please login again to enroll.");
+        return;
+      }
+
+      const res = await fetch('http://localhost:5000/enroll', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ studentId: user._id, courseId: course._id })
+        body: JSON.stringify({ studentId: storedUser._id, courseId: course._id })
       });
-      fetchEnrollments();
+
+      if (res.ok) {
+        alert(`Successfully enrolled in ${course.title}!`);
+        fetchEnrollments();
+      } else {
+        const err = await res.json();
+        alert(`Enrollment failed: ${err.error || 'Unknown error'}`);
+      }
     } catch (e) {
       console.error(e);
+      alert("Network error occurred during enrollment.");
     }
   };
 
