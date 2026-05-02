@@ -13,6 +13,11 @@ export default function Login({ onAuth }) {
             return;
         }
 
+        if (!user) {
+            alert("Please select your role (Learner, Faculty, or Admin) first!");
+            return;
+        }
+
         try {
             const res = await fetch('http://127.0.0.1:5000/auth/login', {
                 method: 'POST',
