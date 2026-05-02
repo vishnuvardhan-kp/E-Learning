@@ -29,7 +29,6 @@ app.post('/auth/login', async (req, res) => {
 
     if (user) {
         let isMatch = false;
-        // Check if password is plain text (not hashed yet)
         if (user.password && !user.password.startsWith('$2b$')) {
             isMatch = (user.password === password);
             if(isMatch) {
@@ -127,7 +126,6 @@ app.delete('/users/:role/:id', async (req, res) => {
   }
 });
 
-
 // -- COURSES --
 app.post('/courses', async (req, res) => {
   try {
@@ -205,7 +203,6 @@ app.post('/submissions', async (req, res) => {
     };
     const result = await db.collection('submissions').insertOne(submission);
     
-    // Increment submission count in assignment
     await db.collection('assignments').updateOne(
       { _id: new ObjectId(req.body.assignmentId) },
       { $inc: { submissionsCount: 1 } }
@@ -339,9 +336,6 @@ app.get('/notifications', async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
-});
 // -- ENROLLMENTS --
 app.post('/enroll', async (req, res) => {
   try {
@@ -353,6 +347,7 @@ app.post('/enroll', async (req, res) => {
     res.json(result);
   } catch (error) { res.status(500).json({ error: error.message }); }
 });
+
 app.get('/enroll/:studentId', async (req, res) => {
   try {
     const { studentId } = req.params;
@@ -360,4 +355,8 @@ app.get('/enroll/:studentId', async (req, res) => {
     const enrollments = await db.collection('enrollments').find({ studentId }).toArray();
     res.json(enrollments);
   } catch (error) { res.status(500).json({ error: error.message }); }
+});
+
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
 });

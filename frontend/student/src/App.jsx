@@ -51,14 +51,19 @@ export default function App() {
 
   const fetchEnrollments = async () => {
     try {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      if (user._id) {
-        const res = await fetch(`http://localhost:5000/enroll/${user._id}`);
+      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+      if (storedUser._id) {
+        const res = await fetch(`http://localhost:5000/enroll/${storedUser._id}`);
         const data = await res.json();
-        // Link with course details
+        
+        // Mark which courses are enrolled in the master list
+        const enrolledIds = data.map(enr => enr.courseId);
+        setCourses(prev => prev.map(c => enrolledIds.includes(c._id) ? { ...c, enrolled: true } : c));
+
+        // Create the list for Learning Dashboard
         const enrolledData = data.map(enr => {
           const courseDetails = courses.find(c => c._id === enr.courseId);
-          return courseDetails ? { ...courseDetails, status: enr.status } : null;
+          return courseDetails ? { ...courseDetails, status: enr.status, time: 'Current Semester', module: 'Unit 1' } : null;
         }).filter(Boolean);
         setEnrolledCourses(enrolledData);
       }
