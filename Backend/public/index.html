@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learning Architecture | Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #0f172a; 
+            min-height: 100vh; 
+            display: flex; 
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background Glows */
+        .bg-glow-1 {
+            position: absolute;
+            top: -10vw;
+            left: -10vw;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(37,99,235,0.4) 0%, rgba(15,23,42,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            bottom: -10vw;
+            right: 20vw;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(236,72,153,0.15) 0%, rgba(15,23,42,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Layout Grid */
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            min-height: 100vh;
+            z-index: 1;
+        }
+
+        /* Left Side: Hero Brand */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10%;
+            color: white;
+        }
+
+        .brand-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            align-self: flex-start;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2.5px;
+            margin: 0 0 24px 0;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin: 0 0 40px 0;
+            max-width: 500px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-box {
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Right Side: Login Frame */
+        .login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .login-container { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 48px; 
+            border-radius: 24px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+            width: 100%; 
+            max-width: 420px; 
+            transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .login-container:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 35px 60px -15px rgba(0,0,0,0.6); 
+        }
+
+        .login-header {
+            margin-bottom: 32px;
+        }
+
+        .login-header h2 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -1px;
+        }
+
+        .login-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .input-group { margin-bottom: 24px; }
+        .input-group label { display: block; margin-bottom: 10px; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+        .input-group input { 
+            width: 100%; 
+            padding: 16px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            font-weight: 500;
+            outline: none; 
+            transition: all 0.2s; 
+            box-sizing: border-box; 
+            background: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: #0f172a;
+        }
+
+        .input-group input:focus { 
+            border-color: #3b82f6; 
+            background: white; 
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); 
+        }
+
+        .input-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        .login-btn { 
+            width: 100%; 
+            padding: 16px; 
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:hover { 
+            background: linear-gradient(135deg, #3b82f6, #2563eb); 
+            transform: translateY(-2px); 
+            box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.4); 
+        }
+
+        .role-picker { display: flex; gap: 10px; margin-bottom: 24px; }
+        .role-btn { flex: 1; padding: 12px 8px; border-radius: 10px; border: 2px solid #e2e8f0; background: #f8fafc; color: #64748b; font-weight: 700; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .role-btn:hover { border-color: #cbd5e1; background: #f1f5f9; }
+        .role-btn.active { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); color: #2563eb; box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.2); }
+
+        .error { 
+            background: #fee2e2; 
+            color: #ef4444; 
+            padding: 14px; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            text-align: center; 
+            margin-bottom: 24px; 
+            display: none; 
+            border: 1px solid #fecaca; 
+        }
+
+        @media (max-width: 900px) {
+            .page-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .hero-section {
+                padding: 40px 24px;
+                text-align: center;
+                align-items: center;
+            }
+            .brand-badge {
+                align-self: center;
+            }
+            .hero-title {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="page-wrapper">
+        <div class="hero-section">
+            <div class="brand-badge">INSTITUTIONAL GRADE</div>
+            <h1 class="hero-title">Shaping the <br/><span>Future of Learning.</span></h1>
+            <p class="hero-subtitle">Access your personalized dashboard. Instructors effortlessly manage curriculum, while students engage with cutting-edge academic material.</p>
+            
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="studentCount">...</div>
+                    <div class="stat-label">Active Students</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="teacherCount">...</div>
+                    <div class="stat-label">Faculty Experts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-section">
+            <div class="login-container">
+                <div class="login-header">
+                    <h2>Secure Portal</h2>
+                    <p>Enter your institutional credentials to proceed.</p>
+                </div>
+
+                <div class="error" id="errorMsg">Authentication failed. Please try again or contact IT.</div>
+                
+                <div class="input-group">
+                    <label>Select Your Role</label>
+                    <div class="role-picker">
+                        <button class="role-btn" id="btn-student" onclick="selectRole('student')">Learner</button>
+                        <button class="role-btn" id="btn-instructor" onclick="selectRole('instructor')">Faculty</button>
+                        <button class="role-btn" id="btn-admin" onclick="selectRole('admin')">Admin</button>
+                    </div>
+                </div>
+                
+                <div class="input-group" id="usernameGroup">
+                    <label>Username or Email</label>
+                    <input type="text" id="username" placeholder="name@institution.edu">
+                </div>
+
+                <div class="input-group">
+                    <label>Access Credential</label>
+                    <input type="password" id="password" placeholder="••••••••">
+                </div>
+                
+                <button class="login-btn" onclick="handleLogin()">Authenticate & Enter</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = '';
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById('btn-' + role);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            // For Admin, only ask for password. For others, show username field.
+            const usernameGroup = document.getElementById('usernameGroup');
+            if (usernameGroup) {
+                usernameGroup.style.setProperty('display', role === 'admin' ? 'none' : 'block', 'important');
+            }
+        }
+
+        async function handleLogin() {
+            const role = selectedRole;
+            if (!role) {
+                alert("Please select a role first.");
+                return;
+            }
+            const username = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            
+            errorMsg.style.display = 'none';
+
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const apiUrl = isLocal ? 'http://localhost:5000' : 'https://vinodh0512-e-learning.hf.space';
+
+            const urls = {
+                admin: isLocal && window.location.port ? 'http://localhost:5173' : 'https://huggingface.co/spaces/vinodh0512/E-learning/admin',
+                instructor: isLocal && window.location.port ? 'http://localhost:5175' : 'https://huggingface.co/spaces/vinodh0512/E-learning/instructor',
+                student: isLocal && window.location.port ? 'http://localhost:5174' : 'https://huggingface.co/spaces/vinodh0512/E-learning/student'
+            };
+
+            try {
+                // Attempt Real Database Authentication
+                const response = await fetch(apiUrl + '/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        role, 
+                        identifier: role === 'admin' ? 'admin' : username, 
+                        password: pass 
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = urls[role] + '/?auth=true';
+                } else {
+                    // Fallback for demo accounts if backend user doesn't exist yet
+                    if (role === 'admin' && pass === 'admin123') {
+                        window.location.href = urls.admin + '/?auth=true';
+                    } else if (role === 'instructor' && (pass === 'instructor123' || pass === 'inst123')) {
+                        window.location.href = urls.instructor + '/?auth=true';
+                    } else if (role === 'student' && (pass === 'student123' || pass === 'stu123')) {
+                        window.location.href = urls.student + '/?auth=true';
+                    } else {
+                        errorMsg.style.display = 'block';
+                    }
+                }
+            } catch (e) {
+                console.error("Login fetch error:", e);
+                // Offline fallback
+                if (role === 'admin' && pass === 'admin123') {
+                    window.location.href = urls.admin + '/?auth=true';
+                } else if (role === 'instructor' && (pass === 'instructor123' || pass === 'inst123')) {
+                    window.location.href = urls.instructor + '/?auth=true';
+                } else if (role === 'student' && (pass === 'student123' || pass === 'stu123')) {
+                    window.location.href = urls.student + '/?auth=true';
+                } else {
+                    errorMsg.style.display = 'block';
+                }
+            }
+        }
+
+        // Add Enter key listener
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') handleLogin();
+        });
+
+        // Fetch Dynamic Stats from DB
+        async function fetchStats() {
+            try {
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const apiUrl = isLocal ? 'http://localhost:5000' : 'https://vinodh0512-e-learning.hf.space';
+                
+                const response = await fetch(apiUrl + '/admin/stats');
+                const data = await response.json();
+                
+                document.getElementById('studentCount').innerText = data.totalStudents || 0;
+                document.getElementById('teacherCount').innerText = data.totalTeachers || 0;
+            } catch (e) {
+                console.error("Stats fetch error:", e);
+                document.getElementById('studentCount').innerText = '150+';
+                document.getElementById('teacherCount').innerText = '45+';
+            }
+        }
+
+        fetchStats();
+    </script>
+</body>
+</html>
