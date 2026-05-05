@@ -11,8 +11,9 @@ window.__API_URL__ = API_URL;
 console.log("🚀 [E-Learning] API Base URL:", API_URL);
 
 // Connectivity Test
-fetch(API_URL + '/auth/login', { method: 'POST' })
-  .then(() => console.log("📡 [E-Learning] Backend Connectivity Test: Reachable"))
+fetch(API_URL + '/')
+  .then(res => res.json())
+  .then(data => console.log("📡 [E-Learning] Backend Connectivity Test: SUCCESS", data))
   .catch(err => console.error("❌ [E-Learning] Backend Connectivity Test: FAILED", err));
 
 ReactDOM.createRoot(document.getElementById('root')).render(

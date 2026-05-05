@@ -16,6 +16,9 @@ app.use((req, res, next) => {
 
 connectDB();
 
+// HEALTH CHECK ROUTE
+app.get('/', (req, res) => res.json({ status: "API is running", timestamp: new Date() }));
+
 // DEBUG ROUTE
 app.get('/test-erase', (req, res) => res.json({ message: "Erase route is reachable" }));
 
