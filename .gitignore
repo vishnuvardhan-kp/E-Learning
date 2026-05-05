@@ -1,0 +1,13 @@
+**/node_modules/
+.env
+.env.local
+dist/
+.DS_Store
+*.log
+.gemini/
+antigravity/
+brain/
+scratch/
+implementation_plan.md
+task.md
+walkthrough.md
