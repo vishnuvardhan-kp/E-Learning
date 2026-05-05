@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const { connectDB, getDB } = require("./db");
@@ -77,11 +78,10 @@ app.post('/auth/login', async (req, res) => {
     
     const db = getDB();
     const collectionName = role + 's';
+    
     const user = await db.collection(collectionName).findOne({
       $or: [{ email: identifier }, { username: identifier }]
     });
-
-
 
     if (user) {
         let isMatch = false;

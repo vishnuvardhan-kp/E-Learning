@@ -166,9 +166,9 @@ export default function StudentApp() {
 
           <div className="topbar-right">
             <div className="user-profile">
-              <div className="user-info hide-mobile">
-                <span className="user-name">{storedUser.username}</span>
-                <span className="user-role">Undergraduate Learner</span>
+              <div className="user-info hide-mobile" style={{ textAlign: 'right' }}>
+                <span className="user-name" style={{ display: 'block', fontWeight: '800', color: '#0f172a' }}>{storedUser.username}</span>
+                <span className="user-email" style={{ display: 'block', fontSize: '11px', color: '#64748b', fontWeight: '600' }}>{storedUser.email || 'Undergraduate Learner'}</span>
               </div>
               <div className="user-avatar">
                 {storedUser.username ? storedUser.username[0] : 'S'}

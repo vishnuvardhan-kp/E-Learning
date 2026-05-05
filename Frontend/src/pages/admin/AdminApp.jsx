@@ -37,6 +37,22 @@ function Sidebar() {
         <h2>ACADEMIA</h2>
       </div>
 
+      <div className="sidebar-user-profile" style={{ padding: '0 24px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '16px' }}>
+          <div style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '18px' }}>
+            {JSON.parse(localStorage.getItem('user') || '{}').username?.charAt(0).toUpperCase() || 'A'}
+          </div>
+          <div style={{ overflow: 'hidden' }}>
+            <h4 style={{ color: 'white', margin: 0, fontSize: '14px', fontWeight: '700', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+              {JSON.parse(localStorage.getItem('user') || '{}').username || 'Administrator'}
+            </h4>
+            <p style={{ color: '#64748b', margin: 0, fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              {JSON.parse(localStorage.getItem('user') || '{}').email || 'No Email Set'}
+            </p>
+          </div>
+        </div>
+      </div>
+
       <nav>
         <Link to="/admin" className={isActive('/admin')}>
           <LayoutDashboard size={20} />

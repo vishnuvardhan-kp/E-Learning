@@ -1,0 +1,80 @@
+/* --- Institutional Page Architecture (Light Blue Sidebar / Sharp Noir Pulse) --- */
+
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background: #000000; /* Institutional Light Blue Foundation */
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid #000000;
+  overflow-y: auto;
+  box-shadow: 10px 0 30px -5px rgba(37, 99, 235, 0.05);
+}
+
+.sidebar h2 {
+  padding: 40px 24px;
+  font-size: 28px;
+  font-weight: 950;
+  letter-spacing: -2.5px;
+  margin: 0;
+  text-transform: uppercase;
+  color: #ffffff; /* Deep Institutional Blue Branding */
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  color: #ffffff; /* Professional Blue Slate Text */
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 4px solid transparent;
+}
+
+.sidebar a:hover {
+  background: #2e2e2e;
+  color: #ffffff;
+  padding-left: 30px;
+  border-left-color: #ffffff;
+}
+
+.sidebar a.active {
+  background: #dbeafe;
+  color: #000000;
+  border-left-color: #000000;
+}
+
+/* EXECUTIVE ACTION PULSE BUTTONS (SHARP NOIR STYLE) */
+.logout-button {
+  margin: 24px;
+  padding: 14px;
+  font-size: 11px;
+  font-weight: 950;
+  color: #ffffff;
+  background: #ef4444; /* CRISIS RED THEME */
+  border: none;
+  border-radius: 0; /* SHARP EDGE RESTORATION */
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+}
+
+.logout-button:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+}
+
+h2 {
+   color: #0f172a;
+   letter-spacing: -1.5px;
+   font-weight: 850;
+   margin-bottom: 20px;
+}

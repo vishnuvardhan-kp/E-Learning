@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { FileText, Clock, CheckCircle, AlertCircle, UploadCloud, ChevronRight, MessageSquare } from 'lucide-react';
 
 export default function Assignments() {
   const [assignments, setAssignments] = useState([]);
   const [activeUploadId, setActiveUploadId] = useState(null);
   const [file, setFile] = useState(null);
+  const [submissions, setSubmissions] = useState([]);
   const [user, setUser] = useState({});
 
   const fetchAssignments = async () => {
@@ -15,6 +15,17 @@ export default function Assignments() {
     } catch(e) {
       console.error(e);
     }
+  };
+
+  const fetchUserSubmissions = async (studentId) => {
+    // This is a bit simplified, ideally we'd have a specific route or filter
+    try {
+      // For simplicity, we'll fetch assignments and then for each check if a submission exists
+      // In a real app, you'd fetch student specific submission status
+      const res = await fetch(__API_URL__ + '/content'); // reusing a fetch pattern
+      // Let's assume we fetch all submissions and filter for the user
+      // But for now, we'll just handle the local state update after submission
+    } catch (e) {}
   };
 
   useEffect(() => {
@@ -32,6 +43,8 @@ export default function Assignments() {
     e.preventDefault();
     if (file) {
       try {
+        // In a real app, you'd upload to S3/Cloudinary and get a URL.
+        // Here we'll simulate a file URL.
         const fileUrl = URL.createObjectURL(file);
         
         await fetch(__API_URL__ + '/submissions', {
@@ -46,9 +59,11 @@ export default function Assignments() {
           })
         });
 
-        setAssignments(assignments.map(a => a._id === assignmentId ? { ...a, status: 'Submitted' } : a));
+        // Update local status to reflect submission
+        setAssignments(assignments.map(a => a._id === assignmentId ? { ...a, status: 'Submitted', statusColor: '#3b82f6' } : a));
         setActiveUploadId(null);
         setFile(null);
+        alert('Assignment submitted successfully!');
       } catch (e) {
         console.error(e);
         alert('Failed to submit assignment.');
@@ -60,179 +75,58 @@ export default function Assignments() {
       alert(`Instructor Feedback:\n\n${feedback || "No feedback available yet."}`);
   };
 
-  const getStatusConfig = (status) => {
-    switch (status) {
-      case 'Submitted':
-        return { color: '#3b82f6', bg: '#eff6ff', icon: <CheckCircle size={14} />, text: 'Submitted' };
-      case 'Graded':
-        return { color: '#10b981', bg: '#ecfdf5', icon: <CheckCircle size={14} />, text: 'Graded' };
-      default:
-        return { color: '#ef4444', bg: '#fef2f2', icon: <AlertCircle size={14} />, text: 'Pending' };
-    }
-  };
-
   return (
-    <div className="animate-fade-in">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px' }}>
-        <div>
-          <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#1e1b4b', margin: 0, letterSpacing: '-1px' }}>Curriculum Tasks</h2>
-          <p style={{ color: '#64748b', fontSize: '14px', marginTop: '4px' }}>Track your academic submissions and instructor feedback.</p>
-        </div>
-        <div style={{ padding: '8px 16px', background: 'white', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <FileText size={18} color="#6366f1" />
-          <span style={{ fontWeight: 700, color: '#1e1b4b', fontSize: '14px' }}>{assignments.length} Total</span>
-        </div>
-      </div>
-
+    <div>
+      <h2 style={{ fontSize: '24px', marginBottom: '24px' }}>Assignment Submissions</h2>
       <div className="card-grid">
         {assignments.map(a => {
             const status = a.status || 'Pending';
-            const config = getStatusConfig(status);
+            const statusColor = a.statusColor || '#ef4444';
             
             return (
-            <div key={a._id} className="card" style={{ padding: '24px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                <div style={{ padding: '10px', background: '#f5f7ff', borderRadius: '12px', color: '#6366f1' }}>
-                  <FileText size={24} />
-                </div>
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '6px', 
-                  padding: '6px 12px', 
-                  borderRadius: '100px', 
-                  background: config.bg, 
-                  color: config.color,
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px'
-                }}>
-                  {config.icon}
-                  {config.text}
-                </div>
-              </div>
-
-              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1e1b4b', marginBottom: '8px' }}>{a.title}</h3>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', fontSize: '13px', marginBottom: '24px' }}>
-                <Clock size={14} />
-                <span>Due on <strong>{a.deadline}</strong></span>
-              </div>
+            <div key={a._id} className="card">
+              <h3>{a.title}</h3>
+              <p>Due: {a.deadline}</p>
+              <p>Status: <span style={{ color: statusColor, fontWeight: 'bold' }}>{status}</span></p>
               
               {status === 'Pending' ? (
                   <>
-                    <button 
-                      className="student-btn"
-                      onClick={() => handleUploadClick(a._id)}
-                      style={{ 
-                        width: '100%', 
-                        background: activeUploadId === a._id ? '#f1f5f9' : '#6366f1',
-                        color: activeUploadId === a._id ? '#475569' : 'white',
-                        border: 'none',
-                        padding: '12px',
-                        borderRadius: '10px',
-                        fontWeight: 700,
-                        fontSize: '14px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      {activeUploadId === a._id ? 'Cancel' : <><UploadCloud size={18} /> Upload Submission</>}
+                    <button className="action-button" onClick={() => handleUploadClick(a._id)}>
+                      {activeUploadId === a._id ? 'Cancel Upload' : 'Upload Submission'}
                     </button>
-
                     {activeUploadId === a._id && (
-                      <form onSubmit={(e) => handleSubmit(a._id, e)} className="animate-fade-in" style={{ marginTop: '16px', padding: '20px', background: '#f8fafc', borderRadius: '16px', border: '2px dashed #e2e8f0' }}>
-                        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-                          <div style={{ width: '48px', height: '48px', background: 'white', borderRadius: '12px', display: 'flex', alignItems: 'center', justifySelf: 'center', justifyContent: 'center', margin: '0 auto 12px', color: '#6366f1', border: '1px solid #e2e8f0' }}>
-                            <UploadCloud size={24} />
-                          </div>
-                          <p style={{ margin: 0, fontSize: '13px', color: '#64748b', fontWeight: 500 }}>Select your assignment PDF</p>
-                        </div>
-                        
+                      <form onSubmit={(e) => handleSubmit(a._id, e)} style={{ marginTop: '16px', padding: '16px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                        <h4 style={{ marginBottom: '12px', fontSize: '14px', color: '#334155' }}>Upload PDF Document:</h4>
                         <input 
                           type="file" 
                           accept=".pdf" 
                           required 
                           onChange={(e) => setFile(e.target.files[0])}
-                          style={{ marginBottom: '16px', width: '100%', fontSize: '12px', color: '#475569' }} 
+                          style={{ marginBottom: '12px', width: '100%', fontSize: '14px' }} 
                         />
-                        
                         <button 
                           type="submit" 
-                          style={{ 
-                            width: '100%',
-                            padding: '12px', 
-                            fontSize: '14px', 
-                            fontWeight: 800, 
-                            background: '#1e1b4b', 
-                            color: 'white', 
-                            border: 'none', 
-                            borderRadius: '10px', 
-                            cursor: 'pointer',
-                            boxShadow: '0 4px 12px rgba(30, 27, 75, 0.2)'
-                          }}
+                          style={{ padding: '8px 16px', fontSize: '12px', fontWeight: 'bold', background: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
                         >
-                          Submit Now
+                          Submit Assignment
                         </button>
                       </form>
                     )}
                   </>
               ) : status === 'Submitted' ? (
-                  <div style={{ 
-                    width: '100%', 
-                    padding: '12px', 
-                    background: '#f1f5f9', 
-                    color: '#64748b', 
-                    borderRadius: '10px', 
-                    textAlign: 'center',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    border: '1px solid #e2e8f0'
-                  }}>
-                    Under Instructor Review
-                  </div>
+                  <button className="action-button" style={{ background: '#e2e8f0', color: '#0f172a' }}>Submission Under Review</button>
               ) : (
                   <button 
-                    className="student-btn"
+                    style={{ padding: '12px 24px', fontSize: '12px', fontWeight: 800, border: 'none', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.5px', background: '#e2e8f0', color: '#0f172a', borderRadius: '8px' }} 
                     onClick={() => handleView(a.feedback)}
-                    style={{ 
-                      width: '100%', 
-                      background: 'white',
-                      color: '#6366f1',
-                      border: '1.5px solid #6366f1',
-                      padding: '12px',
-                      borderRadius: '10px',
-                      fontWeight: 700,
-                      fontSize: '14px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      transition: 'all 0.2s'
-                    }}
                   >
-                    <MessageSquare size={18} />
-                    View Feedback
-                    <ChevronRight size={16} />
+                      View Feedback
                   </button>
               )}
             </div>
         )})}
-        {assignments.length === 0 && (
-          <div style={{ gridColumn: '1 / -1', padding: '60px', textAlign: 'center', background: 'white', borderRadius: '24px', border: '1px solid #e2e8f0' }}>
-            <div style={{ width: '64px', height: '64px', background: '#f5f7ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: '#6366f1' }}>
-              <FileText size={32} />
-            </div>
-            <h3 style={{ color: '#1e1b4b', margin: '0 0 8px 0' }}>No Tasks Assigned</h3>
-            <p style={{ color: '#64748b', margin: 0 }}>You're all caught up! There are no pending assignments at this time.</p>
-          </div>
-        )}
+        {assignments.length === 0 && <p>No assignments to display.</p>}
       </div>
     </div>
   );
 }
-

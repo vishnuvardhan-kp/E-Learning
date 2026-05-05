@@ -350,62 +350,6 @@ body { font-family: 'Inter', sans-serif; }
   gap: 24px;
 }
 
-.card {
-  background: white;
-  border-radius: 24px;
-  border: 1px solid var(--border-color);
-  padding: 24px;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  z-index: 1;
-}
-
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(99, 102, 241, 0.2);
-}
-
-.student-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px 24px;
-  border-radius: 14px;
-  font-weight: 700;
-  font-size: 14px;
-  transition: var(--transition);
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  border: none;
-}
-
-.student-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.25);
-}
-
-.student-btn:active {
-  transform: translateY(0);
-}
-
-.student-btn-primary {
-  background: linear-gradient(135deg, var(--student-primary), var(--student-accent));
-  color: white;
-}
-
-.student-btn-outline {
-  background: white;
-  color: var(--student-primary);
-  border: 1.5px solid var(--student-primary);
-}
-
-.student-btn-outline:hover {
-  background: var(--student-primary-light);
-}
-
 /* ================================================ */
 /* MENU TOGGLE (Mobile)                             */
 /* ================================================ */

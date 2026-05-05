@@ -265,12 +265,12 @@
             
             <div class="stat-grid">
                 <div class="stat-box">
-                    <div class="stat-value" id="studentCount">...</div>
-                    <div class="stat-label">Active Students</div>
+                    <div class="stat-value">99.9%</div>
+                    <div class="stat-label">Uptime Architecture</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value" id="teacherCount">...</div>
-                    <div class="stat-label">Faculty Experts</div>
+                    <div class="stat-value">Multi</div>
+                    <div class="stat-label">Role Workspaces</div>
                 </div>
             </div>
         </div>
@@ -293,11 +293,6 @@
                     </div>
                 </div>
                 
-                <div class="input-group" id="usernameGroup">
-                    <label>Username or Email</label>
-                    <input type="text" id="username" placeholder="name@institution.edu">
-                </div>
-
                 <div class="input-group">
                     <label>Access Credential</label>
                     <input type="password" id="password" placeholder="••••••••">
@@ -314,77 +309,24 @@
         function selectRole(role) {
             selectedRole = role;
             document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById('btn-' + role);
-            if (activeBtn) activeBtn.classList.add('active');
-            
-            // For Admin, only ask for password. For others, show username field.
-            const usernameGroup = document.getElementById('usernameGroup');
-            if (usernameGroup) {
-                usernameGroup.style.setProperty('display', role === 'admin' ? 'none' : 'block', 'important');
-            }
+            document.getElementById('btn-' + role).classList.add('active');
         }
 
-        async function handleLogin() {
-            const role = selectedRole;
-            if (!role) {
-                alert("Please select a role first.");
-                return;
-            }
-            const username = document.getElementById('username').value.trim();
+        function handleLogin() {
+            const user = selectedRole;
             const pass = document.getElementById('password').value.trim();
             const errorMsg = document.getElementById('errorMsg');
             
             errorMsg.style.display = 'none';
 
-            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const apiUrl = isLocal ? 'http://localhost:5000' : 'https://vinodh0512-e-learning.hf.space';
-
-            const urls = {
-                admin: isLocal && window.location.port ? 'http://localhost:5173' : 'https://huggingface.co/spaces/vinodh0512/E-learning/admin',
-                instructor: isLocal && window.location.port ? 'http://localhost:5175' : 'https://huggingface.co/spaces/vinodh0512/E-learning/instructor',
-                student: isLocal && window.location.port ? 'http://localhost:5174' : 'https://huggingface.co/spaces/vinodh0512/E-learning/student'
-            };
-
-            try {
-                // Attempt Real Database Authentication
-                const response = await fetch(apiUrl + '/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        role, 
-                        identifier: role === 'admin' ? 'admin' : username, 
-                        password: pass 
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    window.location.href = urls[role] + '/?auth=true';
-                } else {
-                    // Fallback for demo accounts if backend user doesn't exist yet
-                    if (role === 'admin' && pass === 'admin123') {
-                        window.location.href = urls.admin + '/?auth=true';
-                    } else if (role === 'instructor' && (pass === 'instructor123' || pass === 'inst123')) {
-                        window.location.href = urls.instructor + '/?auth=true';
-                    } else if (role === 'student' && (pass === 'student123' || pass === 'stu123')) {
-                        window.location.href = urls.student + '/?auth=true';
-                    } else {
-                        errorMsg.style.display = 'block';
-                    }
-                }
-            } catch (e) {
-                console.error("Login fetch error:", e);
-                // Offline fallback
-                if (role === 'admin' && pass === 'admin123') {
-                    window.location.href = urls.admin + '/?auth=true';
-                } else if (role === 'instructor' && (pass === 'instructor123' || pass === 'inst123')) {
-                    window.location.href = urls.instructor + '/?auth=true';
-                } else if (role === 'student' && (pass === 'student123' || pass === 'stu123')) {
-                    window.location.href = urls.student + '/?auth=true';
-                } else {
-                    errorMsg.style.display = 'block';
-                }
+            if (user === 'admin' && pass === 'admin123') {
+                window.location.href = 'http://localhost:5173/?auth=true';
+            } else if (user === 'instructor' && (pass === 'instructor123' || pass === 'inst123')) {
+                window.location.href = 'http://localhost:5175/?auth=true';
+            } else if (user === 'student' && (pass === 'student123' || pass === 'stu123')) {
+                window.location.href = 'http://localhost:5174/?auth=true';
+            } else {
+                errorMsg.style.display = 'block';
             }
         }
 
@@ -392,26 +334,6 @@
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') handleLogin();
         });
-
-        // Fetch Dynamic Stats from DB
-        async function fetchStats() {
-            try {
-                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const apiUrl = isLocal ? 'http://localhost:5000' : 'https://vinodh0512-e-learning.hf.space';
-                
-                const response = await fetch(apiUrl + '/admin/stats');
-                const data = await response.json();
-                
-                document.getElementById('studentCount').innerText = data.totalStudents || 0;
-                document.getElementById('teacherCount').innerText = data.totalTeachers || 0;
-            } catch (e) {
-                console.error("Stats fetch error:", e);
-                document.getElementById('studentCount').innerText = '150+';
-                document.getElementById('teacherCount').innerText = '45+';
-            }
-        }
-
-        fetchStats();
     </script>
 </body>
 </html>
