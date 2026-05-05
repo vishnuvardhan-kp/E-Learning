@@ -123,6 +123,25 @@ export default function Login({ onAuth, forcedRole }) {
                             <label>Password</label>
                             <input type="password" className="auth-input" placeholder="••••••••" value={pass} onChange={(e) => setPass(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleLogin()} />
                         </div>
+
+                        {(user === 'student' || user === 'instructor') && (
+                            <button 
+                                type="button"
+                                className="role-btn" 
+                                style={{ width: '100%', marginBottom: '16px', borderStyle: 'dashed', background: '#f0f9ff', color: '#0369a1', borderColor: '#bae6fd' }}
+                                onClick={() => {
+                                    if (user === 'student') {
+                                        setIdentifier('student@gmail.com');
+                                        setPass('password');
+                                    } else if (user === 'instructor') {
+                                        setIdentifier('instructor@gmail.com');
+                                        setPass('password');
+                                    }
+                                }}
+                            >
+                                🚀 Login with Demo Credentials
+                            </button>
+                        )}
                         
                         <button className="auth-login-btn" onClick={handleLogin}>Authenticate & Enter</button>
                     </div>
